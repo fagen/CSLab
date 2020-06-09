@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}实验课信息{% endblock %}
+
+{% block custom_bread %}
+    <section>
+        <div class="wp">
+            <div class="crumbs">
+                <ul>
+                    <li><a href="{% url 'index' %}">首页</a>></li>
+                    <li><a href="{% url 'course:course_list' %}">公开课程</a>></li>
+                    <li><a href="{% url 'course:course_detail' course.id %}">{{ course.name }}</a>></li>
+                    <li>课程章节</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block custom_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/muke/base.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/muke/common-less.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/muke/course/learn-less.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/muke/course/common-less.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/mooc.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/aui.css' %}"/>
+{% endblock %}
+
+{% block content %}
+    <div id="main">
+        <div class="course-infos">
+            <div class="w pr">
+                <div style="height: 15px" class="path">
+                </div>
+                <div class="hd">
+                    <h2 class="l">{{ course.name }}</h2>
+                </div>
+                <div class="statics clearfix">
+
+                    <div class="static-item">
+                        <span class="meta-value"><strong>{{ course.students }}</strong></span>
+                        <span class="meta">学习人数</span>
+                        <em></em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="course-info-main clearfix w has-progress">
+
+            <div class="info-bar clearfix">
+                <div class="content-wrap clearfix">
+                    <div class="content">
+                        <div class="mod-tab-menu">
+                            <ul class="course-menu clearfix">
+                                <li><a class="ui-tabs-active active" id="learnOn"
+                                       href="{% url 'course:course_info' course.id %}"><span>章节</span></a></li>
+                            </ul>
+                        </div>
+                        <div id="notice" class="clearfix">
+                            <div class="l"><strong>课程公告:</strong> <a
+                                    href="javascript:void(0)">待定</a></div>
+                        </div>
+
+                        <div class="mod-chapters">
+                            {% for learning_pro in learning_pros %}
+                                <div class="chapter chapter-active">
+                                    <h3>
+                                        <strong><i class="state-expand"></i>{{ learning_pro.lesson.name }}</strong>
+                                    </h3>
+                                    <ul class="video">
+
+
+                                            <li>
+
+                                                <a target="_blank" href="{% url 'course:video_play' learning_pro.id %}"
+                                                   class="J-media-item studyvideo">{{ learning_pro.lesson.docImageName }}
+                                                    <i class="study-state"></i>
+                                                </a>
+                                            </li>
+
+
+                                    </ul>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="aside r">
+                        <div class="bd">
+
+                            <div class="box mb40">
+                                <h4>资料下载</h4>
+                                <ul class="downlist">
+                                    {% for course_resource in all_resources %}
+                                        <li>
+                                            <span><i
+                                                    class="aui-iconfont aui-icon-file"></i>&nbsp;&nbsp;{{ course_resource.name }}</span>
+                                            <a href="{{ MEDIA_URL }}{{ course_resource.download }}" class="downcode"
+                                               target="_blank" download="" data-id="274" title="">下载</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
+
+                            <div class="box mb40">
+                                <h4>讲师提示</h4>
+                                <div class="teacher-info">
+                                    <a href="" target="_blank">
+                                        <img src='{{ MEDIA_URL }}{{ course.teacher.image }}' width='80' height='80'/>
+                                    </a>
+                                    <span class="tit">
+                                        <a href="" target="_blank">{{ course.teacher.name }}</a>
+                                     </span>
+                                </div>
+                                <div class="course-info-tip">
+                                    <dl class="first">
+                                        <dt>课程须知</dt>
+                                        <dd class="autowrap">{{ course.youneed_know }}</dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>你能学到什么？</dt>
+                                        <dd class="autowrap">{{ course.teacher_tell }}</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
+
+

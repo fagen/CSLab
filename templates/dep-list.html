@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    课程部门列表
+{% endblock %}
+
+{% block custom_bread %}
+    <section>
+        <div class="wp">
+            <ul  class="crumbs">
+                <li><a href="/">首页</a>></li>
+                <li>课程部门</li>
+            </ul>
+        </div>
+    </section>
+{% endblock %}
+
+{% block content %}
+    <section>
+	<div class="wp butler_list_box list">
+	<div class='left'>
+		<div class="all">共<span class="key">{{ dep_nums }}</span>家</div>
+		<div class="butler_list company list">
+		<div class="layout">
+			<div class="head">
+				<ul class="tab_header">
+					<li class="{% if sort == '' %}active{% endif %}"><a
+                            href="?sort=students">全部</a></li>
+                    <li class="{% if sort == 'students' %}active{% endif %}"><a
+                            href="?sort=students">学习人数 &#8595;</a></li>
+                    <li class="{% if sort == 'courses' %}active{% endif %}"><a
+                            href="?sort=courses">课程数 &#8595;</a></li>
+				</ul>
+			</div>
+                {% for course_dep in all_deps.object_list %}
+                <dl class="des difdes">
+                    <dt>
+                        <a href="{% url 'dep:dep_home' course_dep.id %}">
+                            <img width="200" height="120" class="scrollLoading" data-url="{{ MEDIA_URL }}{{ course_dep.image }}"/>
+                        </a>
+                    </dt>
+                    <dd>
+                        <div class="clearfix">
+                             <a href="{% url 'dep:dep_home' course_dep.id %}">
+                                 <h1>{{ course_dep.name }}</h1>
+                                 <div class="pic fl">
+
+                                         <img src="/static/images/authentication.png"/>
+
+                                         <img src="/static/images/gold.png"/>
+
+                                 </div>
+                             </a>
+                        </div>
+                        <ul class="cont">
+                            <li class="first"><p class="pic9">课程数：<span>1</span></p><p class="c7">学习人数：<span>1000</span></p></li>
+                            <li class="c8" style="padding-left:18px;">北京市海淀区中关村南大街</li>
+                            <li class="pic10" style="padding-left:18px;">经典课程：
+
+                                    <a href="/diary/19/">大数据</a>
+
+                                    <a href="/diary/16/">机器学习</a>
+
+                            </li>
+                        </ul>
+                    </dd>
+                    <div class="buy start_groupbuy jsShowPerfect2" data-id="22"><br/>联系<br/>服务</div>
+                </dl>
+                {% endfor %}
+		</div>
+		 <div class="pageturn">
+              <ul class="pagelist">
+                  {% if all_deps.has_previous %}
+                      <li class="long"><a href="?{{ all_deps.previous_page_number.querystring }}">上一页</a></li>
+                  {% endif %}
+
+                  {% for page in all_deps.pages %}
+                      {% if page %}
+                          {% ifequal page all_deps.number %}
+                              <li class="active"><a href="?{{ page.querystring }}">{{ page }}</a></li>
+                          {% else %}
+                              <li><a href="?{{ page.querystring }}" class="page">{{ page }}</a></li>
+                          {% endifequal %}
+                      {% else %}
+                          <li class="none"><a href="">...</a></li>
+                      {% endif %}
+                  {% endfor %}
+                  {% if all_deps.has_next %}
+                      <li class="long"><a href="?{{ all_deps.next_page_number.querystring }}">下一页</a></li>
+                  {% endif %}
+              </ul>
+         </div>
+		</div>
+	</div>
+
+
+
+        </div>
+</section>
+{% endblock %}

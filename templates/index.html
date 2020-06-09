@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}计算机实验网首页{% endblock %}
+
+{% block custom_bread %}
+{% endblock %}
+
+{% block content %}
+<!--banner end-->
+<!--feature start-->
+<!--feature end-->
+<!--module1 start-->
+	<section>
+		<div class="module">
+			<div class="wp">
+				<h1>实验课程</h1>
+				<div class="module1 eachmod">
+					<div class="module1_1 left">
+						<img width="228" height="614" src="{% static 'images/module1_1.jpg' %}"/>
+						<p class="fisrt_word">CSLab<br/>实验平台</p>
+						<a class="more" href="{% url 'course:course_list' %}">查看更多课程 ></a>
+					</div>
+					<div class="right group_list">
+
+                            {% for course in courses %}
+                            <div class="module1_{{ forloop.counter|add:2 }} box">
+                                <a href="{% url 'course:course_detail' course.id %}">
+                                    <img width="233" height="190" src="{{ MEDIA_URL }}{{ course.image }}"/>
+                                </a>
+                                <div class="des">
+                                    <a href="{% url 'course:course_detail' course.id %}">
+                                        <h2 title="django入门">{{ course.name }}</h2>
+                                    </a>
+                                    <span class="fl">难度：<i class="key">{{ course.get_degree_display }}</i></span>
+                                    <span class="fr">学习人数：{{ course.students }}</span>
+                                </div>
+                                <div class="bottom">
+                                    <span class="fl" title="慕课网">{{ course.course_dep.name }}</span>
+                                    <span class="star fr">{{ course.fav_nums }}</span>
+                                </div>
+                            </div>
+                            {% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section>
+		<div class="module greybg">
+			<div class="wp">
+				<h1>课程部门</h1>
+				<div class="module3 eachmod">
+					<div class="module3_1 left">
+						<img width="228" height="463" src="/static/images/module3_1.jpg"/>
+						<p class="fisrt_word">客官快来<br/>做实验啊</p>
+						<a class="more" href="{% url 'dep:dep_list' %}">查看更多部门 ></a>
+					</div>
+					<div class="right">
+						<ul>
+                                {% for dep in course_deps %}
+                                 <li class="{% if forloop.counter|divisibleby:5 %}five{% endif %}">
+                                    <a href="{% url 'dep:dep_home' dep.id %}">
+                                        <div class="company">
+                                            <img width="184" height="100" src="{{ MEDIA_URL }}{{ dep.image }}"/>
+
+                                        </div>
+                                        <p><span class="key" title="{{ dep.name }}">{{ dep.name }}</span></p>
+                                    </a>
+                                </li>
+                                {% endfor %}
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock %}
+{% block custom_js %}
+<script type="text/javascript" src="{% static 'js/index.js' %}"></script>
+{% endblock %}
+

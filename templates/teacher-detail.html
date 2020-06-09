@@ -1,0 +1,148 @@
+{#templates/teacher-detail.html#}
+
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}讲师详情{% endblock %}
+
+{% block custom_bread %}
+    <section>
+        <div class="wp">
+            <ul class="crumbs">
+                <li><a href="{% url 'index' %}">首页</a>></li>
+                <li><a href="{% url 'dep:teacher_list' %}">授课讲师</a>></li>
+                <li>讲师详情</li>
+            </ul>
+        </div>
+    </section>
+{% endblock %}
+
+
+{% block content %}
+    <section>
+	<div class="wp butler-detail-box butler-diaryd-box clearfix">
+        <div class="fl list">
+            <div class="butler_detail_list clearfix">
+                <div class="brief">
+                    <dl class="des">
+                        <dt>
+                            <div class="picpic">
+                                <img width="100" height="100" src="{{ MEDIA_URL }}{{ teacher.image }}"/>
+                            </div>
+
+                        </dt>
+                        <dd>
+                            <a href="{% url 'dep:teacher_detail' teacher.id %}">
+                                <h1>{{ teacher.name }}<span class="key picbig">金牌讲师</span></h1>
+                            </a>
+
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="butler_detail_cont clearfix">
+                <div class="left layout">
+				<div class="head">
+					<ul class="tab_header">
+						<li class="active"><a href="">全部课程</a> </li>
+					</ul>
+				</div>
+                    <div class="companycenter">
+                        <div class="group_list brief">
+                            {% for teacher_course in all_course %}
+                            <div class="module1_5 box">
+                                <a href="{% url 'course:course_detail' teacher_course.id %}">
+                                    <img width="214" height="190" class="scrollLoading" src="{{ MEDIA_URL }}{{ teacher_course.image }}"/>
+                                </a>
+                                <div class="des">
+                                    <a href="{% url 'course:course_detail' teacher_course.id %}"><h2>{{ teacher_course.name }}</h2></a>
+                                    <span class="fr">学习人数：{{ teacher_course.students }}</span>
+                                </div>
+                                <div class="bottom">
+                                    <span class="fl">{{ teacher_course.course_dep.name }}</span>
+
+                                </div>
+                            </div>
+                            {% endfor %}
+
+
+
+                        </div>
+                    </div>
+                <!--<div class="pageturn">-->
+                    <!--<ul class="pagelist">-->
+                        <!--<li class="active"><a href="?page=1">1</a></li>-->
+                    <!--</ul>-->
+                <!--</div>-->
+            </div>
+            </div>
+        </div>
+
+
+        <div class="fr list">
+             <div class="butler_detail_list">
+                <div class="right butler-company-box">
+                <div class="head">
+                    <h1>{{ teacher.dep.name }}</h1>
+                    <p>知名高校，权威教学</p>
+                </div>
+                <div class="pic">
+                    <a href="{% url 'dep:dep_home' teacher.dep.id %}">
+                        <img width="150" height="80" src="{{ MEDIA_URL }}{{ teacher.dep.image }}"/>
+                    </a>
+                </div>
+                <a href="{% url 'dep:dep_home' teacher.dep.id %}">
+                    <h2 class="center">{{ teacher.dep.name }}</h2>
+                </a>
+
+
+            </div>
+            </div>
+
+
+        </div>
+	</div>
+</section>
+{% endblock %}
+
+
+{% block custom_js %}
+    <script type="text/javascript">
+//收藏分享
+function add_fav(current_elem, fav_id, fav_type){
+    $.ajax({
+        cache: false,
+        type: "POST",
+        url:"",
+        data:{'fav_id':fav_id, 'fav_type':fav_type},
+        async: true,
+        beforeSend:function(xhr, settings){
+            xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+        },
+        success: function(data) {
+            if(data.status == 'fail'){
+                if(data.msg == '用户未登录'){
+                    window.location.href="/login/";
+                }else{
+                    alert(data.msg)
+                }
+
+            }else if(data.status == 'success'){
+                current_elem.text(data.msg)
+            }
+        },
+    });
+}
+
+$('#jsLeftBtn').on('click', function(){
+    add_fav($(this), {{ teacher.id }}, 3);
+});
+
+$('#jsRightBtn').on('click', function(){
+    add_fav($(this), {{ teacher.dep.id }}, 2);
+});
+</script>
+{% endblock %}
+
+
+
+

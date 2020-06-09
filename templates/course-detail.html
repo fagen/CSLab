@@ -1,0 +1,171 @@
+{#templates/course-detail.html#}
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}公开课列表{% endblock %}
+
+{% block custom_bread %}
+    <section>
+        <div class="wp">
+		<div class="crumbs">
+			<ul>
+				<li><a href="{% url 'index' %}">首页</a>></li>
+                <li><a href="{% url 'course:course_list' %}">公开课程</a>></li>
+				<li>课程详情</li>
+			</ul>
+		</div>
+	</div>
+    </section>
+{% endblock %}
+
+{% block content %}
+     <section>
+	<div class="wp">
+		<div class="groupPurchase_detail detail">
+			<div class="toppro">
+				<div class="left">
+					<div class="picbox">
+						<div class="tb-booth tb-pic">
+							<img width="440" height="445" src="{{ MEDIA_URL }}{{ course.image }}" class="jqzoom" />
+						</div>
+
+					</div>
+					<div class="des">
+						<h1 title="{{ course.name }}">{{ course.name }}</h1>
+						<span class="key">{{ course.desc }}</span>
+						<div class="prize">
+							<span class="fr">学习人数：{{ course.students }}</span>
+						</div>
+						<ul class="parameter">
+
+                            <li><span class="pram word3">章&nbsp;节&nbsp;数：</span><span>{{ course.get_lesson_nums }}</span></li>
+
+							<li class="piclist"><span class="pram word4">学习用户：</span>
+                                {% for user_course in course.get_learn_users %}
+                                    <span class="pic"><img width="40" height="40" src="{{ MEDIA_URL }}{{ user_course.user.image }}"/></span>
+                                {% endfor %}
+							</li>
+						</ul>
+						<div class="btns">
+                                <div class="buy btn"><a style="color: white" href="{% url 'course:course_info' course.id %}">开始学习</a></div>
+						</div>
+					</div>
+                    <div class="group-share-box">
+                        <div class="bdsharebuttonbox"
+                             data-text="django开始了"
+                             data-desc="我在#慕课网#发现了"
+                             data-comment=""
+                             data-url="/group/groupdetail/15/">
+                            <span class="fl">分享到：</span>
+                            <a href="#" class="bds_more" data-cmd="more"></a>
+                            <a title="分享到QQ空间" href="#" class="bds_qzone" data-cmd="qzone"></a>
+                            <a title="分享到新浪微博" href="#" class="bds_tsina" data-cmd="tsina"></a>
+                            <a title="分享到腾讯微博" href="#" class="bds_tqq" data-cmd="tqq"></a>
+                            <a title="分享到人人网" href="#" class="bds_renren" data-cmd="renren"></a>
+                            <a title="分享到微信" href="#" class="bds_weixin" data-cmd="weixin"></a>
+                        </div>
+                    </div>
+				</div>
+				<div class="right">
+					<div class="head">
+						<h1>授课部门</h1>
+						<p>老流批了</p>
+					</div>
+					<div class="pic">
+                        <a href="/company/14/">
+                            <img width="150" height="80" src="{{ MEDIA_URL }}{{ course.course_dep.image }}"/>
+                        </a>
+                    </div>
+					<a href="/company/14/">
+                        <h2 class="center" title="部门名字">{{ course.course_dep.name }}</h2>
+                    </a>
+
+					<div class="clear">
+						<ul>
+                            <li>
+                                <span>课 &nbsp;程&nbsp; 数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   {{ course.course_dep.get_course_nums }}</span>
+                            </li>
+                            <li>
+                                <span>教 &nbsp;师&nbsp; 数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  {{ course.course_dep.get_teacher_nums }}</span>
+                            </li>
+
+
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+    <section>
+	<div class="wp">
+		<div class="list groupPurchase_detail_pro">
+			<div class="left layout">
+				<div class="head">
+					<ul class="tab_header">
+						<li class="active">课程详情</li>
+					</ul>
+				</div>
+				<div class="tab_cont tab_cont1">
+                    {% autoescape off %}
+                    {{ course.detail }}
+                    {% endautoescape %}
+				</div>
+
+				<div class="tab_cont tab_cont2" >
+					<div class="comment">
+						<div class="comenlist">
+
+	                    </div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="right layout">
+
+			</div>
+		</div>
+	</div>
+</section>
+{% endblock %}
+
+{% block custom_js %}
+    <script type="text/javascript">
+//收藏分享
+function add_fav(current_elem, fav_id, fav_type){
+    $.ajax({
+        cache: false,
+        type: "POST",
+        url:"",
+        data:{'fav_id':fav_id, 'fav_type':fav_type},
+        async: true,
+        beforeSend:function(xhr, settings){
+            xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+        },
+        success: function(data) {
+            if(data.status == 'fail'){
+                if(data.msg == '用户未登录'){
+                    window.location.href="/login/";
+                }else{
+                    alert(data.msg)
+                }
+
+            }else if(data.status == 'success'){
+                current_elem.text(data.msg)
+            }
+        },
+    });
+}
+
+$('#jsLeftBtn').on('click', function(){
+    add_fav($(this), {{ course.id }}, 1);
+});
+
+$('#jsRightBtn').on('click', function(){
+    add_fav($(this), {{ course.course_dep.id }}, 2);
+});
+
+
+</script>
+
+{% endblock %}

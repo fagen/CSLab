@@ -1,0 +1,4 @@
+#!D:\Work_space\django\CSLab\venv\Scripts\python.exe
+# EASY-INSTALL-SCRIPT: 'odfpy==1.4.1','odf2xhtml'
+__requires__ = 'odfpy==1.4.1'
+__import__('pkg_resources').run_script('odfpy==1.4.1', 'odf2xhtml')
